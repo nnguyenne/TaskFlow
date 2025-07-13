@@ -138,7 +138,7 @@ export default function LayoutDefault() {
             {open && <ListItemText primary="Chat" />}
           </ListItemButton>
 
-          <ListItemButton
+          {/* <ListItemButton
             component={NavLink}
             to="/test"
           >
@@ -146,7 +146,7 @@ export default function LayoutDefault() {
               <ListItemIcon><AssignmentIcon /></ListItemIcon>
             </Tooltip>
             {open && <ListItemText primary="Test" />}
-          </ListItemButton>
+          </ListItemButton> */}
 
         </List>
       </Drawer>

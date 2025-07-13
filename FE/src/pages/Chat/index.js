@@ -42,10 +42,10 @@ function Chat() {
     const fetchData = async () => {
       try {
         const [usersRes, convsRes] = await Promise.all([
-          fetch("http://localhost:3002/users/all", {
+          fetch("https://taskflow-jog8.onrender.com/users/all", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://localhost:3002/conversations", {
+          fetch("https://taskflow-jog8.onrender.com/conversations", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -68,7 +68,7 @@ function Chat() {
     const fetchMessages = async () => {
       if (!conversationId) return;
 
-      const res = await fetch(`http://localhost:3002/messages/${conversationId}`, {
+      const res = await fetch(`https://taskflow-jog8.onrender.com/messages/${conversationId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -111,7 +111,7 @@ function Chat() {
     // Nếu chưa có đoạn chat → tạo mới
     if (!convId && selectedUser) {
       try {
-        const res = await fetch("http://localhost:3002/conversations", {
+        const res = await fetch("https://taskflow-jog8.onrender.com/conversations", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

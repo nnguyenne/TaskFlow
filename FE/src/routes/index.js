@@ -4,7 +4,7 @@ import LayoutDefault from '../Layout/LayoutDefault';
 import Register from '../pages/Register';
 import Error404 from '../pages/Error404';
 import PrivateRouter from '../components/PrivateRouter';
-import TestCheck from '../pages/Test';
+// import TestCheck from '../pages/Test';
 import Tasks from '../pages/Tasks';
 import Chat from '../pages/Chat';
 export const routes = [
@@ -30,17 +30,17 @@ export const routes = [
                             { path: ":conversationId", element: <Chat /> },
                         ]
                     },
-                    {
-                        path: "test",
-                        element: <TestCheck />
-                    },
-                    {
-                        path: "test",
-                        children: [
-                            { index: true, element: <TestCheck /> },
-                            { path: ":conversationId", element: <TestCheck /> },
-                        ]
-                    },
+                    // {
+                    //     path: "test",
+                    //     element: <TestCheck />
+                    // },
+                    // {
+                    //     path: "test",
+                    //     children: [
+                    //         { index: true, element: <TestCheck /> },
+                    //         { path: ":conversationId", element: <TestCheck /> },
+                    //     ]
+                    // },
                 ]
             },
         ],
