@@ -1,0 +1,20 @@
+{
+  "short_name": "TaskFlow",
+  "name": "TaskFlow - Quản lý công việc cá nhân và nhóm",
+  "icons": [
+    {
+      "src": "/assets/images/logoTaskFlow.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/images/logoTaskFlow.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2196f3",
+  "background_color": "#ffffff"
+}

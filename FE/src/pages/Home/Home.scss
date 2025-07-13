@@ -1,0 +1,145 @@
+.home {
+  &__overview {
+    background-color: #f8f5f2;
+    width: 100%;
+    padding: 15px 45px;
+    height: auto;
+
+    h2 {
+      color: #fd0000;
+      margin-bottom: 20px;
+    }
+
+  }
+
+  &__status {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    &--in-progress,
+    &--pending,
+    &--completed {
+      display: flex;
+      width: 25%;
+      max-width: 200px;
+      min-width: 120px;
+      height: 80px;
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      padding: 25px 30px;
+      text-align: center;
+      border-radius: 25px;
+      white-space: nowrap;
+      align-items: self-start;
+      justify-content: center;
+    }
+
+    &--in-progress {
+      background-color: #fff3cd;
+      color: #856404;
+      border-left: 5px solid #ffc107;
+      padding: 8px 12px;
+    }
+
+    &--pending {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 5px solid #dc3545;
+      padding: 8px 12px;
+    }
+
+    &--completed {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 5px solid #28a745;
+      padding: 8px 12px;
+    }
+
+    &--total {
+      font-weight: 600;
+      font-size: 32px;
+    }
+  }
+}
+
+
+@media (max-width: 768px) {
+  .home {
+    &__status {
+      justify-content: center;
+      flex-wrap: wrap;
+
+      &--in-progress,
+      &--pending,
+      &--completed {
+        padding: 10px;
+        align-items: self-start;
+        justify-content: center;
+      }
+
+      &--total {
+        font-size: 20px;
+      }
+    }
+
+  }
+}
+
+.task {
+  margin-top: 80px;
+  padding: 15px 45px;
+  background-color: #fff;
+
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    transition: 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &__left {
+      flex: 1;
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    &__desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    &__bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #999;
+    }
+
+    &__deadline {
+      font-weight: 500;
+      color: #dc3545;
+    }
+
+    &__right {
+      margin-left: 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
