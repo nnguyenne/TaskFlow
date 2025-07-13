@@ -33,7 +33,7 @@ function Register() {
     } else {
       alert(data.message);
       setIsLoading(false);
-      const err = data?.message || "Đăng ký thất bại!";
+      const err = data?.message || "Hmm... Something went wrong while signing up. Try again?";
       setError(err);
     }
   };
@@ -48,7 +48,7 @@ function Register() {
           onSubmit={handleSubmit}
         >
           <div className='backHome'><Link to="/">TaskFlow</Link></div>
-          <h1 className='form__title'>Đăng ký</h1>
+          <h1 className='form__title'>Register</h1>
           {error && (
             <Stack sx={{ width: '100%', mb: 2 }} spacing={2}>
               <Alert severity="error">{error}</Alert>
@@ -56,7 +56,7 @@ function Register() {
           )}
           <div className='register__input'>
             <TextField
-              label="Tài khoản*"
+              label="Username*"
               type="text"
               variant="outlined"
               sx={{
@@ -70,7 +70,7 @@ function Register() {
               }
             />
             <TextField
-              label="Mật khẩu*"
+              label="Password*"
               type="password"
               variant="outlined"
               sx={{
@@ -84,7 +84,7 @@ function Register() {
               }
             />
             <TextField
-              label="Họ và tên*"
+              label="Full Name*"
               type="text"
               variant="outlined"
               value={dataRegister.fullName}
@@ -112,7 +112,7 @@ function Register() {
               }
             />
             <TextField
-              label="Số điện thoại*"
+              label="Phone*"
               type="text"
               inputMode="numeric"
               value={dataRegister.phone}
@@ -126,7 +126,7 @@ function Register() {
               }
             />
             <TextField
-              label="Nghề nghiệp/Chức vụ*"
+              label="Role*"
               type="text"
               inputMode="numeric"
               value={dataRegister.role}
@@ -142,14 +142,14 @@ function Register() {
 
           </div>
           <div className='form__btn'>
-            <a href='/login' className='form__switch'>Đã có tài khoản? Đăng nhập ngay</a>
+            <a href='/login' className='form__switch'>Already have an account? Log in now.</a>
             <Button
               type="submit"
               variant="contained"
               sx={{ m: 1 }}
               loading={isLoading}
             >
-              Đăng ký
+              Submit
             </Button>
           </div>
         </Box>

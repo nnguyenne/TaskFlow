@@ -99,9 +99,9 @@ export default function LayoutDefault() {
           px: 2,
         }}>
           {open ? (
-            <img src="/assets/images/logo1.png" alt="Logo Full" width={120} />
+            <img src="./assets/images/logo1.png" alt="Logo Full" width={120} />
           ) : (
-            <img src="/assets/images/logo2.png" alt="Logo Mini" width={30} />
+            <img src="./assets/images/logo2.png" alt="Logo Mini" width={30} />
           )}
         </Toolbar>
         <Divider />

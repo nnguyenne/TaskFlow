@@ -5,6 +5,7 @@
   &__sidebar-left,
   &__sidebar-right {
     width: 50%;
+    max-width: 240px;
     transition: width 0.3s ease-out;
     border: 1px solid #ccc;
     padding: 10px;
@@ -38,6 +39,7 @@
   }
 
   &__main {
+    width: 100%;
     max-width: 100%;
     position: relative;
     padding: 10px;
@@ -88,7 +90,7 @@
 
   &__input-wrapper {
     position: absolute;
-    bottom: 3%;
+    bottom: 10px;
     display: flex;
     width: 100%;
     justify-content: center;

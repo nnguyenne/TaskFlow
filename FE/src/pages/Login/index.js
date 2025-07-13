@@ -28,7 +28,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
       window.location.href = "/";
     } else {
-      setError("Tài khoản hoặc mật khẩu không chính xác.");
+      setError("Oops! That login info doesn’t seem right. Try again?");
       setIsLoading(false);
     }
   };
@@ -42,7 +42,7 @@ function Login() {
         onSubmit={handleSubmit}
       >
         <div className='backHome'><Link to="/">TaskFlow</Link></div>
-        <h1 className='form__title'>Đăng nhập</h1>
+        <h1 className='form__title'>Login</h1>
         {error && (
           <Stack sx={{ width: '100%', mb: 2 }} spacing={2}>
             <Alert severity="error">{error}</Alert>
@@ -50,7 +50,7 @@ function Login() {
         )}
         <div className='login__input'>
           <TextField
-            label="Tài khoản"
+            label="Username"
             type="text"
             variant="outlined"
             value={dataLogin.username}
@@ -59,7 +59,7 @@ function Login() {
             }
           />
           <TextField
-            label="Mật khẩu"
+            label="Password"
             type="password"
             variant="outlined"
             value={dataLogin.password}
@@ -69,14 +69,14 @@ function Login() {
           />
         </div>
         <div className='form__btn'>
-          <a href='/register' className='form__switch'>Chưa có tài khoản? Đăng ký ngay</a>
+          <a href='/register' className='form__switch'>Don't have an account? Sign up now</a>
           <Button
             type="submit"
             variant="contained"
             sx={{ m: 1 }}
             loading={isLoading}
           >
-            Đăng nhập
+            Login
           </Button>
         </div>
       </Box>

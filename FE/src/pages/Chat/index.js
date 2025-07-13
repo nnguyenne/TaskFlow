@@ -139,7 +139,9 @@ function Chat() {
   // Chọn đoạn chat
   const handleClickConversation = (item) => {
     navigate(`/chat/${item._id}`);
-    setReceiver(item.fullName);
+    const receiver = item.members.find(m => m._id !== currentUser._id);
+    setReceiver(receiver?.fullName || "Người dùng");
+    console.log(item)
     setSelectedUser(null); // xoá user đang chọn nếu có
   };
   // Khi click vào user bên phải
@@ -161,8 +163,8 @@ function Chat() {
   return (
     <div className="chat">
       {/* Sidebar trái */}
-      <div className={`chat__sidebar-left ${openChatList ? "" : "chat__sidebar-close" }`}>
-        <h4 className="chat__heading">Đoạn chat</h4>
+      <div className={`chat__sidebar-left ${openChatList ? "" : "chat__sidebar-close"}`}>
+        <h4 className="chat__heading">Conversations</h4>
         <ul className="chat__conversation-list">
           {conversations.map((item) => (
             <li key={item._id} className={`chat__conversation-item ${conversationId === item._id}`}>
@@ -183,7 +185,7 @@ function Chat() {
           <>
             <div className="chat__title">
               <IconButton onClick={() => setOpenChatList(!openChatList)}>{openChatList ? <CloseIcon /> : <MenuIcon />}</IconButton>
-              <h4 className="chat__heading">Tin nhắn từ: {receiver}</h4>
+              <h4 className="chat__heading">Messages from: {receiver}</h4>
             </div>
             <ul className="chat__messages">
               {messages.map((msg, i) => (
@@ -219,13 +221,13 @@ function Chat() {
             </div>
           </>
         ) : (
-          <p className="chat__placeholder">Chọn đoạn chat để bắt đầu trò chuyện</p>
+          <p className="chat__placeholder">Select a conversation to start chatting</p>
         )}
       </div>
 
       {/* Sidebar phải */}
       <div className="chat__sidebar-right">
-        <h4 className="chat__heading">Người dùng</h4>
+        <h4 className="chat__heading">Friend</h4>
         <ul className="chat__user-list">
           {userList.map((user) => (
             <li key={user._id} className="chat__user-item">
