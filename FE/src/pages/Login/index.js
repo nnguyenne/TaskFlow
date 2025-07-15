@@ -17,7 +17,7 @@ function Login() {
   });
 
   const handleSubmit = async (e) => {
-    console.log(dataLogin);
+    // console.log(dataLogin);
     e.preventDefault();
     setIsLoading(true);
     setError("");

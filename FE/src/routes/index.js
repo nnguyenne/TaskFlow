@@ -30,17 +30,6 @@ export const routes = [
                             { path: ":conversationId", element: <Chat /> },
                         ]
                     },
-                    // {
-                    //     path: "test",
-                    //     element: <TestCheck />
-                    // },
-                    // {
-                    //     path: "test",
-                    //     children: [
-                    //         { index: true, element: <TestCheck /> },
-                    //         { path: ":conversationId", element: <TestCheck /> },
-                    //     ]
-                    // },
                 ]
             },
         ],

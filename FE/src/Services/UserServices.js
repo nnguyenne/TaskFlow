@@ -6,7 +6,7 @@ export const getUser = async () => {
 }
 
 export const getAllUser = async () => {
-  const result = await get("users");
+  const result = await get("users/all");
   return result;
 }
 

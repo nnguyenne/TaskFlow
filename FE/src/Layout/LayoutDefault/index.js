@@ -99,9 +99,9 @@ export default function LayoutDefault() {
           px: 2,
         }}>
           {open ? (
-            <img src="./assets/images/logo1.png" alt="Logo Full" width={120} />
+            <img src="/assets/images/logo1.png" alt="Logo Full" width={120} />
           ) : (
-            <img src="./assets/images/logo2.png" alt="Logo Mini" width={30} />
+            <img src="/assets/images/logo2.png" alt="Logo Mini" width={30} />
           )}
         </Toolbar>
         <Divider />
@@ -137,17 +137,6 @@ export default function LayoutDefault() {
             </Tooltip>
             {open && <ListItemText primary="Chat" />}
           </ListItemButton>
-
-          {/* <ListItemButton
-            component={NavLink}
-            to="/test"
-          >
-            <Tooltip title="Test" placement="right" disableHoverListener={open}>
-              <ListItemIcon><AssignmentIcon /></ListItemIcon>
-            </Tooltip>
-            {open && <ListItemText primary="Test" />}
-          </ListItemButton> */}
-
         </List>
       </Drawer>
 

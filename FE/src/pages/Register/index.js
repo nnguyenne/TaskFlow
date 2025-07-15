@@ -24,7 +24,7 @@ function Register() {
     setIsLoading(true);
     setError(false);
     const data = await register(dataRegister);
-    console.log(data);
+    // console.log(data);
     if (data.user) {
       alert(data.message);
       setError("");

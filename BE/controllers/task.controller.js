@@ -53,7 +53,8 @@ exports.getTask = async (req, res) => {
 
     // Bộ lọc
     const filter = {
-      createdBy: userID,
+      createdBy: userID, // Theo ID ngườ tạo
+      parentTask: null, // Chỉ lấy task không phải task con
       $or: [
         { title: { $regex: keyword, $options: "i" } },
         { description: { $regex: keyword, $options: "i" } }
