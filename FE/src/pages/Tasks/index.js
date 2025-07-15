@@ -52,29 +52,21 @@ function Tasks() {
     const fetchApi = async () => {
       const data = await getTask(search, page, 5, sort);
       setDataTask(data.data);
-      console.log(data.data)
+      // console.log(data.data)
       setTotalPage(data.totalPage);
     };
     fetchApi();
   }, [reLoad, openEdit, page, search, sort]);
 
   //Xóa
-  const handleDelete = (taskId) => {
-    const fetchApi = async () => {
-      const result = await deleteTask(taskId);
-      // const task = result.task;
-      if (!result.task) {
-        setOpenSnackbar(true);
-        setMessage(result.message);
-        setSeverity("error");
-      } else {
-        setOpenSnackbar(true);
-        setMessage(result.message);
-        setSeverity("success");
-      }
-    }; fetchApi();
+  const handleDelete = async (taskId) => {
+    const result = await deleteTask(taskId);
+    setSeverity(result.task ? "success" : "error");
+    setMessage(result.message);
+    setOpenSnackbar(true);
     setReLoad(Date.now());
   };
+
 
   //Lấy id task
   const handleToggleExpand = (taskId) => {
@@ -156,7 +148,7 @@ function Tasks() {
         </FormControl >
       </Box>
 
-      <CreateMyTask onReload={handleReload} parentTask={null}/>
+      <CreateMyTask onReload={handleReload} parentTask={null} />
 
       <Pagination
         sx={{ display: 'flex', justifyContent: 'center' }}
@@ -206,18 +198,18 @@ function Tasks() {
                     <Box sx={{ pl: 3, display: 'flex', justifyContent: 'space-between' }}
                       key={subtask._id}>
                       <Typography
-                        sx={{ pl: 0, pr: 0, pb: 1, flex: '1', fontWeight: 600, fontSize:'15px' }}
+                        sx={{ pl: 0, pr: 0, pb: 1, flex: '1', fontWeight: 600, fontSize: '15px' }}
                       >
                         - {subtask.title}:
                         <Typography component="span"
-                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', textAlign: 'justify', fontSize:'14px', display: 'block' }}
+                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', textAlign: 'justify', fontSize: '14px', display: 'block' }}
                           color="text.secondary"
                         >
                           {subtask.description}
                         </Typography>
                       </Typography>
                       <Box sx={{ display: 'flex', width: '100px' }}>
-                        <IconButton sx={{ width: '40px' }}  onClick={() => { setTaskUpdate(subtask); setOpenEdit(true) }}>
+                        <IconButton sx={{ width: '40px' }} onClick={() => { setTaskUpdate(subtask); setOpenEdit(true) }}>
                           <EditIcon />
                         </IconButton>
                         <IconButton sx={{ width: '40px' }} color="error" onClick={() => { setOpen(true); setTaskToDelete(subtask) }}>
