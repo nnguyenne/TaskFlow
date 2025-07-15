@@ -12,6 +12,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { check } from '../../Services/UserServices';
+import Logo1 from '../../assets/images/Logo1.png';
+import Logo2 from '../../assets/images/Logo2.png';
 import "./Layout.scss";
 
 const drawerWidth = 150;
@@ -99,9 +101,9 @@ export default function LayoutDefault() {
           px: 2,
         }}>
           {open ? (
-            <img src="/assets/images/logo1.png" alt="Logo Full" width={120} />
+            <img src={Logo1} alt="Logo Full" width={120} />
           ) : (
-            <img src="/assets/images/logo2.png" alt="Logo Mini" width={30} />
+            <img src={Logo2} alt="Logo Mini" width={30} />
           )}
         </Toolbar>
         <Divider />
