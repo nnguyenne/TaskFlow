@@ -96,7 +96,7 @@ export default function LayoutDefault() {
       >
         <Toolbar sx={{
           display: 'flex',
-          justifyContent: open ? 'space-between' : 'center',
+          justifyContent: open ? 'center' : 'center',
           alignItems: 'center',
           px: 2,
         }}>

@@ -10,9 +10,9 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 function CreateMyTask(props) {
-  const { onReload } = props;
+  const { onReload, parentTask } = props;
   const [open, setOpen] = useState(false);
-  const dataForm = { title: '', description: '', deadline: '' }
+  const dataForm = { title: '', description: '', deadline: '', parentTask: parentTask }
   const [taskDataForm, settaskDataForm] = useState({ ...dataForm });
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -81,6 +81,9 @@ function CreateMyTask(props) {
             label="Task Description"
             fullWidth
             margin="dense"
+            multiline
+            minRows={4}
+            maxRows={8}
             value={taskDataForm.description}
             onChange={(e) => settaskDataForm({ ...taskDataForm, description: e.target.value })}
           />

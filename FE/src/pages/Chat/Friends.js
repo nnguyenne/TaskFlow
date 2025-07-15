@@ -1,14 +1,14 @@
 import { IconButton } from "@mui/material";
 import { useEffect } from "react";
 import ChatIcon from "@mui/icons-material/Chat";
-// import MenuIcon from '@mui/icons-material/Menu'; 
-// import CloseIcon from '@mui/icons-material/Close';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from "react-router-dom";
 import { getAllUser } from "../../Services/UserServices";
 
 function Friends(props) {
   const currentUser = JSON.parse(localStorage.getItem("user"));
-  const { setReceiver, setSelectedUser, setMessages, conversations, userList, setUserList } = props;
+  const { setReceiver, setSelectedUser, setMessages, conversations, userList, setUserList, openFriendList, setOpenFriendList } = props;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,8 +18,6 @@ function Friends(props) {
     };
     fetchApi();
   }, [currentUser._id, setUserList]);
-
-
 
   // Khi click vào user bên phải
   const handleClickUser = (user) => {
@@ -40,8 +38,11 @@ function Friends(props) {
   return (
     <>
       {/* Sidebar phải */}
-      <div className="chat__sidebar-right">
+      <div className={`chat__sidebar-right ${openFriendList?"":"chat__sidebar-close"}`}>
+
+        <h3 className="chat__sidebar-right--status" onClick={() => setOpenFriendList(!openFriendList)}>{openFriendList ? <ChevronRightIcon/> : <ChevronLeftIcon/>}</h3>
         <h4 className="chat__heading">Friend</h4>
+
         <ul className="chat__user-list">
           {userList.map((user) => (
             <li key={user._id} className="chat__user-item">

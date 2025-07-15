@@ -38,6 +38,50 @@ function validateCreateTask(data) {
   return null;
 }
 
+// exports.getTask = async (req, res) => {
+//   try {
+//     const userID = req.user._id; // Lấy từ token
+//     const { keyword = "", page = 1, limit = 5, sort = "createdAt_desc" } = req.query;
+
+//     if (!userID) {
+//       return res.status(400).json({ message: "Thiếu token" });
+//     }
+
+//     const parsedPage = Number(page) || 1;
+//     const parsedLimit = Number(limit) || 5;
+//     const skip = (parsedPage - 1) * parsedLimit;
+
+//     // Bộ lọc
+//     const filter = {
+//       createdBy: userID, // Theo ID ngườ tạo
+//       parentTask: null, // Chỉ lấy task không phải task con
+//       $or: [
+//         { title: { $regex: keyword, $options: "i" } },
+//         { description: { $regex: keyword, $options: "i" } }
+//       ]
+//     };
+
+//     // Xử lý sắp xếp
+//     let sortOption = {};
+//     const [sortField, sortOrder] = sort.split("_"); // VD: deadline_asc, createdAt_desc
+//     sortOption[sortField] = sortOrder === "asc" ? 1 : -1;
+
+//     // Truy vấn
+//     const tasks = await Task.find(filter)
+//       .sort(sortOption)
+//       .skip(skip)
+//       .limit(parsedLimit);
+
+//     const total = await Task.countDocuments(filter);
+//     const totalPage = Math.ceil(total / parsedLimit);
+
+//     res.json({ data: tasks, totalPage });
+//   } catch (error) {
+//     console.log("Lỗi trong xuất dữ liệu (getTask):", error);
+//     res.status(500).json({ message: "Lỗi server", error });
+//   }
+// };
+
 exports.getTask = async (req, res) => {
   try {
     const userID = req.user._id; // Lấy từ token
@@ -67,21 +111,39 @@ exports.getTask = async (req, res) => {
     sortOption[sortField] = sortOrder === "asc" ? 1 : -1;
 
     // Truy vấn
-    const tasks = await Task.find(filter)
+    const parentTasks = await Task.find(filter)
       .sort(sortOption)
       .skip(skip)
-      .limit(parsedLimit);
+      .limit(parsedLimit)
+      .lean();
+
+    const parentIds = parentTasks.map(task => task._id); // Lấy danh sách _id của task cha
+    const subtasks = await Task.find({ parentTask: { $in: parentIds } }); // Lấy các task con có parentTask nằm trong danh sách
+
+    const taskMap = {}; // ✅ THÊM: object để map task cha với subtasks
+    parentTasks.forEach(task => {
+      taskMap[task._id.toString()] = { ...task, subtasks: [] }; // Tạo cấu trúc có thêm `subtasks`
+    });
+
+    subtasks.forEach(sub => {
+      const pid = sub.parentTask.toString();
+      if (taskMap[pid]) {
+        taskMap[pid].subtasks.push(sub); // Đẩy subtask vào đúng task cha
+      }
+    });
+
+    const tasksWithSub = Object.values(taskMap);//
 
     const total = await Task.countDocuments(filter);
     const totalPage = Math.ceil(total / parsedLimit);
 
-    res.json({ data: tasks, totalPage });
+    // res.json({ data: tasks, totalPage });
+    res.json({ data: tasksWithSub, totalPage });
   } catch (error) {
     console.log("Lỗi trong xuất dữ liệu (getTask):", error);
     res.status(500).json({ message: "Lỗi server", error });
   }
 };
-
 
 
 exports.createTask = async (req, res) => {

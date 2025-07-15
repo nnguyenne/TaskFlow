@@ -25,8 +25,6 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningIcon from '@mui/icons-material/Warning';
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import CreateMyTask from './CreateMyTask';
@@ -35,7 +33,7 @@ import UpdateMyTask from './UpdateMyTask';
 function Tasks() {
   const [reLoad, setReLoad] = useState(Date.now());
   const [openEdit, setOpenEdit] = useState(false);
-  const [dataTask, setDataTask] = useState([]); // khởi tạo mảng listTask
+  const [dataTask, setDataTask] = useState([]); // khởi tạo mảng listTask cha
   const [sort, setSort] = useState('createdAt_desc');
   const [taskUpdate, setTaskUpdate] = useState([]);
   const [expandedId, setExpandedId] = useState(null); // Quản lý task đang mở
@@ -54,6 +52,7 @@ function Tasks() {
     const fetchApi = async () => {
       const data = await getTask(search, page, 5, sort);
       setDataTask(data.data);
+      console.log(data.data)
       setTotalPage(data.totalPage);
     };
     fetchApi();
@@ -61,7 +60,6 @@ function Tasks() {
 
   //Xóa
   const handleDelete = (taskId) => {
-    // console.log("Xoá task:", taskId);
     const fetchApi = async () => {
       const result = await deleteTask(taskId);
       // const task = result.task;
@@ -74,12 +72,9 @@ function Tasks() {
         setMessage(result.message);
         setSeverity("success");
       }
-      // console.log(result);
     }; fetchApi();
     setReLoad(Date.now());
   };
-
-  // console.log(sort)
 
   //Lấy id task
   const handleToggleExpand = (taskId) => {
@@ -89,8 +84,6 @@ function Tasks() {
   const handleReload = () => {
     setReLoad(Date.now());
   };
-  // console.log("Đang mở task: ", expandedId)
-  // console.log(search)
   return (
     <>
 
@@ -163,8 +156,8 @@ function Tasks() {
         </FormControl >
       </Box>
 
-      <CreateMyTask onReload={handleReload} />
-      
+      <CreateMyTask onReload={handleReload} parentTask={null}/>
+
       <Pagination
         sx={{ display: 'flex', justifyContent: 'center' }}
         count={totalPage}
@@ -179,13 +172,14 @@ function Tasks() {
             <ListItem key={item._id}
               component="div"
               onClick={() => handleToggleExpand(item._id)}
-              divider
+              // divider
+              sx={{ borderTop: '2px solid #ccc', borderBottom: '1px dashed #ccc' }}
               alignItems="flex-start"
             >
 
               <ListItemText
                 primary={item.title}
-                secondary={`Hạn chót: ${(item.deadline.slice(0, 10))}`}
+                secondary={`Deadline: ${(item.deadline.slice(0, 10))}`}
               />
 
               <ListItemSecondaryAction>
@@ -195,25 +189,51 @@ function Tasks() {
                 <IconButton onClick={() => { setOpen(true); setTaskToDelete(item) }}>
                   <DeleteIcon />
                 </IconButton>
-                {/* <IconButton onClick={() => handleToggleExpand(item._id)}>
-                  {expandedId === item._id ? (
-                    <ExpandLessIcon />
-                  ) : (
-                    <ExpandMoreIcon />
-                  )}
-                </IconButton> */}
               </ListItemSecondaryAction>
             </ListItem>
 
             <Collapse in={expandedId === item._id} timeout="auto" unmountOnExit>
-              <Typography sx={{ pl: 4, pr: 2, pb: 2 }} color="text.secondary">
+              <CreateMyTask onReload={handleReload} parentTask={item._id} />
+
+              <Typography sx={{ p: 1, pl: 3 }} fontWeight={'bold'} color="black">
                 {item.description}
               </Typography>
+
+
+              {item?.subtasks.length > 0 && (
+                <Box sx={{ ml: 3 }}>
+                  {item.subtasks.map((subtask) => (
+                    <Box sx={{ pl: 3, display: 'flex', justifyContent: 'space-between' }}
+                      key={subtask._id}>
+                      <Typography
+                        sx={{ pl: 0, pr: 0, pb: 1, flex: '1', fontWeight: 600, fontSize:'15px' }}
+                      >
+                        - {subtask.title}:
+                        <Typography component="span"
+                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', textAlign: 'justify', fontSize:'14px', display: 'block' }}
+                          color="text.secondary"
+                        >
+                          {subtask.description}
+                        </Typography>
+                      </Typography>
+                      <Box sx={{ display: 'flex', width: '100px' }}>
+                        <IconButton sx={{ width: '40px' }}  onClick={() => { setTaskUpdate(subtask); setOpenEdit(true) }}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton sx={{ width: '40px' }} color="error" onClick={() => { setOpen(true); setTaskToDelete(subtask) }}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+
             </Collapse>
 
           </Fragment>
         ))}
-      </List>
+      </List >
     </>
   );
 }
