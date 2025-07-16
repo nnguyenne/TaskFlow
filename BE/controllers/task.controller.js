@@ -38,49 +38,6 @@ function validateCreateTask(data) {
   return null;
 }
 
-// exports.getTask = async (req, res) => {
-//   try {
-//     const userID = req.user._id; // Lấy từ token
-//     const { keyword = "", page = 1, limit = 5, sort = "createdAt_desc" } = req.query;
-
-//     if (!userID) {
-//       return res.status(400).json({ message: "Thiếu token" });
-//     }
-
-//     const parsedPage = Number(page) || 1;
-//     const parsedLimit = Number(limit) || 5;
-//     const skip = (parsedPage - 1) * parsedLimit;
-
-//     // Bộ lọc
-//     const filter = {
-//       createdBy: userID, // Theo ID ngườ tạo
-//       parentTask: null, // Chỉ lấy task không phải task con
-//       $or: [
-//         { title: { $regex: keyword, $options: "i" } },
-//         { description: { $regex: keyword, $options: "i" } }
-//       ]
-//     };
-
-//     // Xử lý sắp xếp
-//     let sortOption = {};
-//     const [sortField, sortOrder] = sort.split("_"); // VD: deadline_asc, createdAt_desc
-//     sortOption[sortField] = sortOrder === "asc" ? 1 : -1;
-
-//     // Truy vấn
-//     const tasks = await Task.find(filter)
-//       .sort(sortOption)
-//       .skip(skip)
-//       .limit(parsedLimit);
-
-//     const total = await Task.countDocuments(filter);
-//     const totalPage = Math.ceil(total / parsedLimit);
-
-//     res.json({ data: tasks, totalPage });
-//   } catch (error) {
-//     console.log("Lỗi trong xuất dữ liệu (getTask):", error);
-//     res.status(500).json({ message: "Lỗi server", error });
-//   }
-// };
 
 exports.getTask = async (req, res) => {
   try {
@@ -176,7 +133,7 @@ exports.updateTask = async (req, res) => {
     const userID = req.user._id; // Lấy ID người dùng từ token đã xác thực
 
     const { id } = req.params; // Lấy ID của task cần cập nhật từ URL
-    const { title, description, assignedTo, groupId, parentTask, deadline } = req.body;
+    const { title, description, assignedTo, groupId, parentTask, deadline, isCompleted } = req.body;
 
     // Kiểm tra token có hợp lệ không
     if (!userID) {
@@ -190,11 +147,16 @@ exports.updateTask = async (req, res) => {
     }
 
     // Cập nhật task theo ID, trả về task mới nhất sau khi cập nhật
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
-      { title, description, createdBy: userID, assignedTo, groupId, parentTask, deadline },
-      { new: true } // Trả về task sau khi cập nhật
-    );
+    const updateFields = {};
+    if (title !== undefined) updateFields.title = title;
+    if (description !== undefined) updateFields.description = description;
+    if (assignedTo !== undefined) updateFields.assignedTo = assignedTo;
+    if (groupId !== undefined) updateFields.groupId = groupId;
+    if (parentTask !== undefined) updateFields.parentTask = parentTask;
+    if (deadline !== undefined) updateFields.deadline = deadline;
+    if (isCompleted !== undefined) updateFields.isCompleted = isCompleted;
+
+    const updatedTask = await Task.findByIdAndUpdate(id, updateFields, { new: true });
 
     // Nếu không tìm thấy task cần cập nhật
     if (!updatedTask) {

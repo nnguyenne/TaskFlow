@@ -7,6 +7,7 @@ import PrivateRouter from '../components/PrivateRouter';
 // import TestCheck from '../pages/Test';
 import Tasks from '../pages/Tasks';
 import Chat from '../pages/Chat';
+import TestAll from '../pages/test';
 export const routes = [
     {
         path: "/",
@@ -29,6 +30,10 @@ export const routes = [
                             { index: true, element: <Chat /> },
                             { path: ":conversationId", element: <Chat /> },
                         ]
+                    },
+                    {
+                        path: "test",
+                        element: <TestAll />
                     },
                 ]
             },

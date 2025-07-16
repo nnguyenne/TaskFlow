@@ -10,7 +10,7 @@ export const socket = io("https://taskflow-jog8.onrender.com", {
   }
 });
 
-// //Local dùng cái này
+// //Local dùng cái này + BE Local
 // export const socket = io("http://localhost:3002", {
 //   auth: {
 //     token: token

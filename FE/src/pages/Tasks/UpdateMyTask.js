@@ -91,6 +91,9 @@ function UpdateMyTask(props) {
             label="Task Description"
             fullWidth
             margin="dense"
+            multiline
+            minRows={4}
+            maxRows={8}
             value={taskDataForm.description}
             onChange={(e) => settaskDataForm({ ...taskDataForm, description: e.target.value })}
           />

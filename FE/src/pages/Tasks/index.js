@@ -1,9 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
-import { deleteTask, getTask } from '../../Services/TaskServices';
+import { deleteTask, getTask, updateTask } from '../../Services/TaskServices';
 import {
   List,
   ListItem,
-  ListItemText,
   IconButton,
   Collapse,
   ListItemSecondaryAction,
@@ -41,7 +40,9 @@ function Tasks() {
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("info"); // success | error | warning | info
   const [open, setOpen] = useState(false);
+  const [openStatus, setOpenStatus] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState({});
+  const [status, setStatus] = useState('pending');
 
   const [totalPage, setTotalPage] = useState(10);
   const [page, setPage] = useState(1)
@@ -67,6 +68,15 @@ function Tasks() {
     setReLoad(Date.now());
   };
 
+  // Cập nhật Status
+  const handleUpdateStatus = async (item) => {
+    const result = await updateTask(item._id, { ...item, isCompleted: status })
+    setSeverity(result.task ? "success" : "error");
+    setMessage(result.message);
+    setOpenSnackbar(true);
+    setReLoad(Date.now());
+    // console.log(taskUpdate)
+  };
 
   //Lấy id task
   const handleToggleExpand = (taskId) => {
@@ -78,7 +88,6 @@ function Tasks() {
   };
   return (
     <>
-
       <UpdateMyTask task={taskUpdate} onReload={handleReload} openEdit={openEdit} setOpenEdit={setOpenEdit} />
 
       {/* Thông báo */}
@@ -92,9 +101,9 @@ function Tasks() {
           severity={severity}
           sx={{
             position: "fixed",
-            top: "20%",
+            top: "30%",
             left: "50%",
-            transform: "translate(-80%, -50%)",
+            transform: "translate(-70%, -50%)",
             zIndex: 9999,
           }}
         >
@@ -102,7 +111,7 @@ function Tasks() {
         </Alert>
       </Snackbar>
 
-      {/* Xác nhận */}
+      {/* Xác nhận xóa */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <WarningIcon color="error" /> Delete {taskToDelete.title || ""}
@@ -115,6 +124,25 @@ function Tasks() {
           <Button color="error" onClick={() => {
             setOpen(false);
             handleDelete(taskToDelete._id)
+          }}>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Xác nhận cập nhật status */}
+      <Dialog open={openStatus} onClose={() => setOpenStatus(false)}>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <WarningIcon color="info" /> Change the status of {taskToDelete.title || ""} to: {status}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>Delete Confirmation?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenStatus(false)}>Cancel</Button>
+          <Button color="error" onClick={() => {
+            setOpenStatus(false);
+            handleUpdateStatus(taskUpdate)
           }}>
             Confirm
           </Button>
@@ -168,13 +196,36 @@ function Tasks() {
               sx={{ borderTop: '2px solid #ccc', borderBottom: '1px dashed #ccc' }}
               alignItems="flex-start"
             >
+              <Box>
+                <Typography fontWeight="bold" fontSize={20}>
+                  {item.title}
+                </Typography>
+                <Typography fontSize={16} color="text.secondary">
+                  Status: {item.isCompleted}
+                </Typography>
+                <Typography fontSize={14} color="error">
+                  Deadline: {item.deadline.slice(0, 10)}
+                </Typography>
+              </Box>
 
-              <ListItemText
-                primary={item.title}
-                secondary={`Deadline: ${(item.deadline.slice(0, 10))}`}
-              />
 
               <ListItemSecondaryAction>
+                <Select
+                  size="small"
+                  value={item.isCompleted}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    setTaskUpdate(item)
+                    setOpenStatus(true);
+                  }}
+
+                  sx={{ minWidth: 80, fontSize: 14 }}
+                >
+                  <MenuItem value="Pending">⏳ Pending</MenuItem>
+                  <MenuItem value="In Progress">🔧 In Progress</MenuItem>
+                  <MenuItem value="Completed">✅ Completed</MenuItem>
+                </Select>
+
                 <IconButton onClick={() => { setTaskUpdate(item); setOpenEdit(true) }}>
                   <EditIcon />
                 </IconButton>
@@ -187,28 +238,49 @@ function Tasks() {
             <Collapse in={expandedId === item._id} timeout="auto" unmountOnExit>
               <CreateMyTask onReload={handleReload} parentTask={item._id} />
 
-              <Typography sx={{ p: 1, pl: 3 }} fontWeight={'bold'} color="black">
-                {item.description}
+              <Typography sx={{ p: 1, pl: 3, whiteSpace: 'pre-line', textAlign: 'justify' }} fontWeight={'bold'} color="black">
+                {item.description.trim()}
               </Typography>
 
 
               {item?.subtasks.length > 0 && (
                 <Box sx={{ ml: 3 }}>
                   {item.subtasks.map((subtask) => (
-                    <Box sx={{ pl: 3, display: 'flex', justifyContent: 'space-between' }}
+                    <Box sx={{ pl: 3, display: 'flex', justifyContent: 'space-between', alignItems:'center' }}
                       key={subtask._id}>
                       <Typography
                         sx={{ pl: 0, pr: 0, pb: 1, flex: '1', fontWeight: 600, fontSize: '15px' }}
                       >
                         - {subtask.title}:
                         <Typography component="span"
-                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', textAlign: 'justify', fontSize: '14px', display: 'block' }}
+                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', whiteSpace: 'pre-line', textAlign: 'justify', fontSize: '14px', display: 'block' }}
                           color="text.secondary"
                         >
-                          {subtask.description}
+                          {subtask.description.trim()}
+                        </Typography>
+                        <Typography component="span"
+                          sx={{ pl: 4, pr: 1, pb: 2, flex: '1', whiteSpace: 'pre-line', textAlign: 'justify', fontSize: '14px', display: 'block' }}
+                          color="text.secondary"
+                        >
+                          Status: {subtask.isCompleted}
                         </Typography>
                       </Typography>
-                      <Box sx={{ display: 'flex', width: '100px' }}>
+                      <Box sx={{ display: 'flex', width: '220px', maxHeight:"50px" }}>
+                        <Select
+                          size="small"
+                          value={subtask.isCompleted}
+                          onChange={(e) => {
+                            setStatus(e.target.value);
+                            setTaskUpdate(subtask)
+                            setOpenStatus(true);
+                          }}
+
+                          sx={{ minWidth: 50, fontSize: 14 }}
+                        >
+                          <MenuItem value="Pending">⏳ Pending</MenuItem>
+                          <MenuItem value="In Progress">🔧 In Progress</MenuItem>
+                          <MenuItem value="Completed">✅ Completed</MenuItem>
+                        </Select>
                         <IconButton sx={{ width: '40px' }} onClick={() => { setTaskUpdate(subtask); setOpenEdit(true) }}>
                           <EditIcon />
                         </IconButton>
