@@ -239,7 +239,7 @@ function Tasks() {
               <CreateMyTask onReload={handleReload} parentTask={item._id} />
 
               <Typography sx={{ p: 1, pl: 3, whiteSpace: 'pre-line', textAlign: 'justify' }} fontWeight={'bold'} color="black">
-                {item.description.trim()}
+                {item?.description.trim()}
               </Typography>
 
 
@@ -256,7 +256,7 @@ function Tasks() {
                           sx={{ pl: 4, pr: 1, pb: 2, flex: '1', whiteSpace: 'pre-line', textAlign: 'justify', fontSize: '14px', display: 'block' }}
                           color="text.secondary"
                         >
-                          {subtask.description.trim()}
+                          {subtask?.description.trim()}
                         </Typography>
                         <Typography component="span"
                           sx={{ pl: 4, pr: 1, pb: 2, flex: '1', whiteSpace: 'pre-line', textAlign: 'justify', fontSize: '14px', display: 'block' }}
